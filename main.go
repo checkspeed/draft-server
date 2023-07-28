@@ -36,9 +36,14 @@ func welcome(w http.ResponseWriter, req *http.Request) {
 func getNetworkInfo(w http.ResponseWriter, req *http.Request) {
 	ipAddr := req.URL.Query().Get("ip")
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
 	resp, err := http.Get("http://ip-api.com/json/" + ipAddr)
 	if err != nil {
 		log.Println("error calling ip-api endpoint", err)
+
+		json.NewEncoder(w).Encode(apiResp{Error: err.Error()})
 	}
 	defer resp.Body.Close()
 
@@ -50,7 +55,5 @@ func getNetworkInfo(w http.ResponseWriter, req *http.Request) {
 		Data:    respBody,
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(apiResp)
 }
