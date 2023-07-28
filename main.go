@@ -36,6 +36,8 @@ func welcome(w http.ResponseWriter, req *http.Request) {
 func getNetworkInfo(w http.ResponseWriter, req *http.Request) {
 	ipAddr := req.URL.Query().Get("ip")
 
+	log.Println("received request ip: ", ipAddr)
+	
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
@@ -55,5 +57,6 @@ func getNetworkInfo(w http.ResponseWriter, req *http.Request) {
 		Data:    respBody,
 	}
 
+	log.Println("api response: ", apiResp)
 	json.NewEncoder(w).Encode(apiResp)
 }
